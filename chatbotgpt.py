@@ -40,3 +40,13 @@ if prompt := st.chat_input("What is up?"):
         )
         response = st.write_stream(stream)
     st.session_state.messages.append({"role": "assistant", "content": response})
+
+
+# Interface utilisateur pour choisir le modèle GPT
+st.sidebar.title("Configuration GPT")
+st.session_state.openai_model = st.sidebar.selectbox(
+    "Choisissez le modèle GPT :",
+    options=["gpt-3.5-turbo", "gpt-3.5-turbo-instruct", "gpt-3.5-turbo-1106", "gpt-3.5-turbo-0125"],
+    index=0  
+)
+
