@@ -26,3 +26,27 @@ if prompt := st.chat_input("What is up?"):
     # Display user message in chat message container
     with st.chat_message("user"):
         st.markdown(prompt)
+
+ # Display assistant response in chat message container
+    with st.chat_message("assistant"):
+        stream = client.chat.completions.create(
+            model=st.session_state["openai_model"],
+            messages=[
+                {"role": m["role"], "content": m["content"]}
+                for m in st.session_state.messages
+            ],
+            stream=True,
+            max_tokens = 200,
+        )
+        response = st.write_stream(stream)
+    st.session_state.messages.append({"role": "assistant", "content": response})
+
+
+# Interface utilisateur pour choisir le modèle GPT
+st.sidebar.title("Configuration GPT")
+st.session_state.openai_model = st.sidebar.selectbox(
+    "Choisissez le modèle GPT :",
+    options=["gpt-3.5-turbo", "gpt-3.5-turbo-instruct", "gpt-3.5-turbo-1106", "gpt-3.5-turbo-0125"],
+    index=0  
+)
+
