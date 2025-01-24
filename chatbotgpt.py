@@ -36,17 +36,29 @@ if prompt := st.chat_input("What is up?"):
                 for m in st.session_state.messages
             ],
             stream=True,
-            max_tokens = 200,
+            max_tokens = st.session_state["max_tokens"],  # Utilisation de la valeur du slider
         )
         response = st.write_stream(stream)
     st.session_state.messages.append({"role": "assistant", "content": response})
 
 
-# Interface utilisateur pour choisir le modèle GPT
+# Selectbox pour choisir le modèle GPT
 st.sidebar.title("Configuration GPT")
 st.session_state.openai_model = st.sidebar.selectbox(
     "Choisissez le modèle GPT :",
     options=["gpt-3.5-turbo", "gpt-3.5-turbo-instruct", "gpt-3.5-turbo-1106", "gpt-3.5-turbo-0125"],
     index=0  
 )
+
+
+
+# Ajout d'un slider pour choisir le nombre maximal de jetons
+st.session_state["max_tokens"] = st.sidebar.slider(
+    "Nombre maximum de jetons générés :",
+    min_value=0,
+    max_value=500,
+    value=200,  # Default value
+    step=10
+)
+
 
